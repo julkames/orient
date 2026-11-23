@@ -3,23 +3,25 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#FBF7F0">
+  <meta name="theme-color" content="#F7F5FC">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <title>ORIENT! – Zamień spacer w przygodę</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='12' fill='none' stroke='%23C2185B' stroke-width='5'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23F57C00'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='12' fill='none' stroke='%235E17EB' stroke-width='5'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%232E6B1F'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="lib/leaflet/leaflet.css">
   <style>
     :root {
-      --tlo: #FBF7F0;
+      /* ====== KOLORY ORIENT! – zmieniaj tylko tutaj ====== */
+      --glowny: #5E17EB;       /* fiolet z prezentacji (cyfryzacja) – kółka punktów, główne przyciski */
+      --zielen: #2E6B1F;       /* leśna zieleń – zdobyte punkty, sukces */
+      --tusz: #0F1529;         /* granat z prezentacji – tekst i ciemne przyciski */
+      --tlo: #F7F5FC;          /* tło aplikacji (lekko fioletowa biel) */
       --karta: #FFFFFF;
-      --tusz: #1F2A24;
-      --szary: #6B736E;
-      --linia: #E8E1D5;
-      --magenta: #C2185B;      /* kolor kółek na mapach do orientacji */
-      --pomarancz: #F57C00;    /* kolor lampionu */
-      --zielen: #2E7D32;
-      --zielen-jasna: #E8F3E9;
-      --cien: 0 2px 0 rgba(31,42,36,.06), 0 8px 24px rgba(31,42,36,.07);
+      --szary: #5F6475;
+      --linia: #E4E0F0;
+      --zielen-jasna: #EAF3E5;
+      --glowny-jasny: rgba(94,23,235,.18);
+      /* =================================================== */
+      --cien: 0 2px 0 rgba(15,21,41,.05), 0 8px 24px rgba(15,21,41,.08);
       --r: 18px;
     }
     * { box-sizing: border-box; }
@@ -40,9 +42,9 @@
     .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 22px; letter-spacing: 0.02em; }
     .kolko {
       width: 30px; height: 30px; border-radius: 50%;
-      border: 4px solid var(--magenta); position: relative; flex: none;
+      border: 4px solid var(--glowny); position: relative; flex: none;
     }
-    .kolko::after { content: ""; position: absolute; inset: 6px; border-radius: 50%; background: var(--pomarancz); }
+    .kolko::after { content: ""; position: absolute; inset: 6px; border-radius: 50%; background: var(--zielen); }
     .wstecz {
       width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--linia);
       background: var(--karta); display: grid; place-items: center; font-size: 20px; flex: none;
@@ -62,7 +64,7 @@
       min-height: 54px; border: 0; border-radius: 16px; font-weight: 700; font-size: 17px;
       background: var(--tusz); color: #fff; padding: 0 18px; text-decoration: none;
     }
-    .btn.magenta { background: var(--magenta); }
+    .btn.glowny { background: var(--glowny); }
     .btn.jasny { background: var(--karta); color: var(--tusz); border: 1px solid var(--linia); }
     .btn:active { transform: scale(.98); }
     .maly { font-size: 14px; color: var(--szary); }
@@ -71,15 +73,15 @@
     /* ---------- ekran główny ---------- */
     .hero { padding: 6px 2px 20px; }
     .hero h1 { font-size: 34px; font-weight: 800; }
-    .hero h1 span { color: var(--magenta); }
+    .hero h1 span { color: var(--glowny); }
     .hero p { color: var(--szary); margin-top: 8px; font-size: 17px; }
     .trasa-karta { display: block; width: 100%; text-align: left; border: 0; position: relative; overflow: hidden; }
-    .trasa-karta::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: var(--kolor, var(--magenta)); }
+    .trasa-karta::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: var(--kolor, var(--glowny)); }
     .trasa-karta h2 { font-size: 21px; margin-bottom: 4px; }
     .meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
     .chip { font-size: 13px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: var(--tlo); color: var(--tusz); }
     .pasek { height: 8px; border-radius: 4px; background: var(--linia); margin-top: 14px; overflow: hidden; }
-    .pasek > i { display: block; height: 100%; background: var(--kolor, var(--magenta)); border-radius: 4px; transition: width .4s; }
+    .pasek > i { display: block; height: 100%; background: var(--kolor, var(--glowny)); border-radius: 4px; transition: width .4s; }
     .tryb-baner {
       background: #FFF3E0; color: #8A4B00; border-radius: 12px; padding: 10px 14px;
       font-size: 14px; font-weight: 600; margin-bottom: 14px;
@@ -88,19 +90,19 @@
     /* ---------- mapa ---------- */
     #mapa { height: 280px; border-radius: var(--r); overflow: hidden; box-shadow: var(--cien); background: #e9efe6; z-index: 0; }
     .pk-ikona {
-      width: 34px; height: 34px; border-radius: 50%; border: 4px solid var(--magenta); background: rgba(255,255,255,.75);
-      display: grid; place-items: center; font-weight: 800; font-size: 13px; color: var(--magenta);
+      width: 34px; height: 34px; border-radius: 50%; border: 4px solid var(--glowny); background: rgba(255,255,255,.75);
+      display: grid; place-items: center; font-weight: 800; font-size: 13px; color: var(--glowny);
     }
     .pk-ikona.zdobyty { background: var(--zielen); border-color: var(--zielen); color: #fff; }
-    .pk-ikona.nastepny { box-shadow: 0 0 0 6px rgba(194,24,91,.22); }
+    .pk-ikona.nastepny { box-shadow: 0 0 0 6px var(--glowny-jasny); }
     .ja-ikona { width: 18px; height: 18px; border-radius: 50%; background: #1E88E5; border: 3px solid #fff; box-shadow: 0 0 0 6px rgba(30,136,229,.25); }
 
     /* ---------- lista etapów ---------- */
     .etap { display: flex; gap: 14px; align-items: flex-start; padding: 14px 0; border-top: 1px solid var(--linia); }
     .etap:first-child { border-top: 0; padding-top: 2px; }
     .nr {
-      width: 36px; height: 36px; flex: none; border-radius: 50%; border: 3px solid var(--magenta);
-      color: var(--magenta); display: grid; place-items: center; font-weight: 800; font-size: 15px;
+      width: 36px; height: 36px; flex: none; border-radius: 50%; border: 3px solid var(--glowny);
+      color: var(--glowny); display: grid; place-items: center; font-weight: 800; font-size: 15px;
     }
     .etap.zdobyty .nr { background: var(--zielen); border-color: var(--zielen); color: #fff; font-size: 18px; }
     .etap.ukryty .nr { border-color: var(--linia); color: var(--szary); }
@@ -108,21 +110,21 @@
     .etap .tresc { flex: 1; min-width: 0; }
     .etap .wsk { color: var(--szary); font-size: 15px; margin-top: 2px; }
     .test-btn {
-      margin-top: 8px; font-size: 13px; font-weight: 700; border: 1px dashed var(--pomarancz); color: #8A4B00;
+      margin-top: 8px; font-size: 13px; font-weight: 700; border: 1px dashed #F57C00; color: #8A4B00;
       background: #FFF8EF; border-radius: 10px; padding: 6px 10px;
     }
 
     /* ---------- ekran punktu ---------- */
     .srodek { text-align: center; }
     .duza-ikona { font-size: 72px; line-height: 1; margin: 6px 0 10px; }
-    .kod-pk { display: inline-block; font-weight: 800; color: var(--magenta); border: 3px solid var(--magenta); border-radius: 999px; padding: 2px 12px; font-size: 14px; }
+    .kod-pk { display: inline-block; font-weight: 800; color: var(--glowny); border: 3px solid var(--glowny); border-radius: 999px; padding: 2px 12px; font-size: 14px; }
     .ciekawostka { font-size: 19px; line-height: 1.5; text-align: left; }
     .ciekawostka-naglowek { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
     .odp { display: block; width: 100%; text-align: left; padding: 14px 16px; border-radius: 14px; border: 2px solid var(--linia); background: var(--karta); font-weight: 600; margin-top: 10px; }
     .odp.zle { border-color: #E57373; background: #FDECEC; animation: trzes .35s; }
     .odp.dobrze { border-color: var(--zielen); background: var(--zielen-jasna); }
     @keyframes trzes { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
-    .spinner { width: 54px; height: 54px; border-radius: 50%; border: 6px solid var(--linia); border-top-color: var(--magenta); margin: 30px auto 18px; animation: krec 1s linear infinite; }
+    .spinner { width: 54px; height: 54px; border-radius: 50%; border: 6px solid var(--linia); border-top-color: var(--glowny); margin: 30px auto 18px; animation: krec 1s linear infinite; }
     @keyframes krec { to { transform: rotate(360deg); } }
 
     /* ---------- trofea ---------- */
@@ -152,9 +154,9 @@
     .przelacznik { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-top: 1px solid var(--linia); }
     .przelacznik:first-child { border-top: 0; padding-top: 0; }
     .przelacznik .opis { flex: 1; }
-    .przelacznik input { width: 26px; height: 26px; accent-color: var(--magenta); }
+    .przelacznik input { width: 26px; height: 26px; accent-color: var(--glowny); }
     .wspolrzedne { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 15px; background: var(--tlo); border-radius: 10px; padding: 10px 12px; word-break: break-all; }
-    .tworca { border: 2px dashed var(--pomarancz); }
+    .tworca { border: 2px dashed #F57C00; }
   </style>
 </head>
 <body>

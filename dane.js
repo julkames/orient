@@ -81,7 +81,7 @@ const TRASY = [
     dlugosc: "2 km",
     czas: "ok. 1 h",
     wiek: "6–10 lat",
-    kolor: "#C2185B",
+    kolor: "#5E17EB",
     kolejnosc: true,
     etapy: [
       {
@@ -133,7 +133,7 @@ const TRASY = [
     dlugosc: "700 m",
     czas: "ok. 20 min",
     wiek: "3–6 lat",
-    kolor: "#2E7D32",
+    kolor: "#2E6B1F",
     kolejnosc: false,
     etapy: [
       {

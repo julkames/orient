@@ -27,6 +27,9 @@ function postepTrasy(id) {
 
 /* ---------- 2. Pomocnicze ---------- */
 
+// Kolory czytane z index.html (sekcja KOLORY), żeby były w jednym miejscu
+function kolor(nazwa) { return getComputedStyle(document.documentElement).getPropertyValue("--" + nazwa).trim(); }
+
 const app = document.getElementById("app");
 
 function esc(t) {
@@ -176,7 +179,7 @@ function narysujMape(t, p, nastepnyIdx) {
     }).addTo(mapa).bindPopup(`<b>${i + 1}. ${esc(zdobyty ? pk.nazwa : "Punkt " + (i + 1))}</b>`);
   });
   if (t.kolejnosc && linia.length > 1) {
-    L.polyline(linia, { color: "#C2185B", weight: 2, opacity: .45, dashArray: "6 6" }).addTo(mapa);
+    L.polyline(linia, { color: kolor("glowny"), weight: 2, opacity: .45, dashArray: "6 6" }).addTo(mapa);
   }
   if (granice.length) mapa.fitBounds(granice, { padding: [36, 36], maxZoom: 17 });
 }
@@ -285,12 +288,12 @@ async function sprawdzLokalizacje(kod, trasa) {
       <div class="karta srodek stos"><div class="duza-ikona">🔭</div>
       <h2>Jesteście jeszcze daleko</h2>
       <p>Do punktu zostało ok. <b>${ladnyDystans(d)}</b>. Podejdźcie do tabliczki i przyłóżcie telefon jeszcze raz.</p>
-      <button class="btn magenta" onclick="ekranPunktu('${kod}')">Sprawdź ponownie</button>
+      <button class="btn glowny" onclick="ekranPunktu('${kod}')">Sprawdź ponownie</button>
       <button class="btn jasny" onclick="ekranTrasy('${trasa.id}')">Pokaż mapę</button></div>`;
   } catch (e) {
     app.innerHTML = `${gora({ wstecz: `ekranTrasy('${trasa.id}')`, tytul: trasa.nazwa })}
       <div class="karta stos">${tekstBleduLokalizacji(e)}
-      <button class="btn magenta" onclick="ekranPunktu('${kod}')">Spróbuj ponownie</button></div>`;
+      <button class="btn glowny" onclick="ekranPunktu('${kod}')">Spróbuj ponownie</button></div>`;
   }
 }
 
@@ -309,7 +312,7 @@ function pokazTresc(kod, trasa, { juzByl = false } = {}) {
   const dalej = juzByl
     ? `<div class="karta srodek" style="background:var(--zielen-jasna)"><p><b>${esc(etap?.trofeum?.ikona || "🏅")} To trofeum już macie!</b></p></div>
        <button class="btn" onclick="ekranTrasy('${trasa.id}')">Wróć do trasy</button>`
-    : trasa && !etap?.pytanie ? `<button class="btn magenta" onclick="zdobadz('${kod}')">Odbierz trofeum 🏅</button>` : "";
+    : trasa && !etap?.pytanie ? `<button class="btn glowny" onclick="zdobadz('${kod}')">Odbierz trofeum 🏅</button>` : "";
 
   app.innerHTML = `
     ${gora({ wstecz: trasa ? `ekranTrasy('${trasa.id}')` : "ekranGlowny()", tytul: trasa ? trasa.nazwa : pk.nazwa })}
@@ -371,7 +374,7 @@ function zdobadz(kod) {
         <p class="maly" style="margin-top:6px">${p.zdobyte.length} z ${trasa.etapy.length} punktów</p>
       </div>
       ${koniec
-        ? `<button class="btn magenta" onclick="ekranKonca('${trasa.id}')">Zobacz podsumowanie 🎉</button>`
+        ? `<button class="btn glowny" onclick="ekranKonca('${trasa.id}')">Zobacz podsumowanie 🎉</button>`
         : `<div class="karta"><div class="etykieta">Następny: punkt ${nastNr}</div>
              <p style="margin-top:6px">${esc(trasa.kolejnosc ? nastepny.wskazowka : "Szukajcie pozostałych punktów w dowolnej kolejności!")}</p></div>
            <button class="btn" onclick="ekranTrasy('${trasa.id}')">Pokaż mapę</button>`}
@@ -393,14 +396,14 @@ function ekranKonca(id) {
         ${p.start && p.koniec ? `<p class="maly" style="margin-top:4px">Czas wyprawy: ${ladnyCzas(p.koniec - p.start)}</p>` : ""}
       </div>
       <div class="karta"><div class="etykieta" style="margin-bottom:12px">Wasze trofea</div><div class="siatka">${trofea}</div></div>
-      <button class="btn magenta" onclick="ekranGlowny()">Wybierz kolejną trasę</button>
+      <button class="btn glowny" onclick="ekranGlowny()">Wybierz kolejną trasę</button>
     </div>`;
   konfetti(150);
   window.scrollTo(0, 0);
 }
 
 function konfetti(ile) {
-  const kolory = ["#C2185B", "#F57C00", "#2E7D32", "#F5B700", "#1E88E5"];
+  const kolory = [kolor("glowny"), kolor("zielen"), "#F5B700", "#9B6BFF", "#7DBB5C"];
   const box = document.createElement("div");
   box.className = "konfetti";
   for (let i = 0; i < ile; i++) {
